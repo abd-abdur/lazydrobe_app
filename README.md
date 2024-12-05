@@ -48,8 +48,7 @@ lazyDrobe/
     ├── public/
     ├── src/
     └── wireframe.png
-
-
+```
 
 ## Technologies Used
 
