@@ -8,10 +8,11 @@ LazyDrobe-Online is designed to help users create outfits, track their fashion t
 
 ### Project Structure
 
-# LazyDrobe-Online Project Structure
+# LazyDrobe Project Structure
 
 This document outlines the structure of the LazyDrobe project.
 
+```plaintext
 lazyDrobe/
 ├── README.md
 ├── backend/
@@ -47,6 +48,7 @@ lazyDrobe/
     ├── public/
     ├── src/
     └── wireframe.png
+
 
 
 ## Technologies Used
@@ -116,3 +118,60 @@ You can start the FastAPI backend using Uvicorn:
     uvicorn app.main:app --reload
    ```
 This will run the backend on [http://localhost:8000](http://localhost:8000).
+
+
+### Step 3: Frontend Setup
+
+1. **Navigate to the Frontend directory:**
+
+   ```bash
+   cd frontend
+   ```
+
+2. **Install Python dependencies:**
+
+    ```bash
+   npm install
+   ```
+3. **Run the Frontend**
+You can start the FastAPI backend using Uvicorn:
+    ```bash
+    npm start
+   ```
+This will run the backend on [http://localhost:3000](http://localhost:3000).
+
+
+### Step 4: Using Docker (Optional but Recommended)
+
+If you prefer using Docker to manage both frontend and backend together, follow these steps:
+
+1. **Build and Start Containers:**
+   
+From the root directory of the project, run:
+
+   ```bash
+   docker-compose up --build
+
+   ```
+This will build and start both the frontend and backend containers.
+
+2. **Install Python dependencies:**
+
+    ```bash
+   npm install
+   ```
+3. **Access the Application:**
+- **Frontend:** Access it at [http://localhost:80](http://localhost:80).
+- **Backend:** The backend API is available at [http://localhost:8000](http://localhost:8000).
+
+### Database Setup
+
+The backend uses PostgreSQL for database management. To set up the database:
+
+1. Ensure your PostgreSQL database is running (via Docker or locally).
+
+2. Run the database migrations to apply the schema:
+
+   ```bash
+   alembic upgrade head
+   ```
