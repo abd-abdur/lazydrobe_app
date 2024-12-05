@@ -1,0 +1,30 @@
+services:
+  backend:
+    image: lazydrobe-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lazydrobe-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - my-network
+
+  frontend:
+    image: lazydrobe-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lazydrobe-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

@@ -1,0 +1,398 @@
+Postman Tests for API Endpoints
+
+### User Management
+
+1. Create a New User
+- **Endpoint**: POST /users/
+- **Method**: POST
+- **JSON Input**:
+{
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "SecurePassword123",
+    "location": "New York, USA",
+    "preferences": {"fashion": ["casual", "formal"]},
+    "gender": "Male"
+}
+- **Output**:
+{
+    "user_id": 1,
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "location": "New York, USA",
+    "preferences": {"fashion": ["casual", "formal"]},
+    "gender": "Male",
+    "date_created": "2024-11-17T10:00:00"
+}
+
+2. User Login
+- **Endpoint**: POST /login
+- **Method**: POST
+- **JSON Input**:
+{
+    "email": "johndoe@example.com",
+    "password": "SecurePassword123"
+}
+- **Output**:
+{
+    "user_id": 1,
+    "username": "johndoe",
+    "email": "johndoe@example.com"
+}
+
+3. Retrieve a User by ID
+- **Endpoint**: GET /users/{user_id}
+- **Method**: GET
+- **URL Parameters**: 
+  - user_id: Replace {user_id} with the ID of the user (e.g., 1).
+- **Output**:
+{
+    "user_id": 1,
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "location": "New York, USA",
+    "preferences": {"fashion": ["casual", "formal"]},
+    "gender": "Male",
+    "date_created": "2024-11-17T10:00:00"
+}
+
+4. Update User Information
+- **Endpoint**: PUT /users/{user_id}
+- **Method**: PUT
+- **URL Parameters**:
+  - user_id: Replace {user_id} with the ID of the user (e.g., 1).
+- **JSON Input**:
+{
+    "username": "john_doe_updated",
+    "email": "johndoe2@example.com",
+    "password": "newsecurepassword",
+    "location": "Los Angeles, USA",
+    "preferences": {"fashion": ["casual", "sportswear"]},
+    "gender": "Other",
+}
+- **Output**:
+{
+    "user_id": 1,
+    "username": "john_doe_updated",
+    "email": "johndoe2@example.com",
+    "location": "Los Angeles, USA",
+    "preferences": {"fashion": ["casual", "sportswear"]},
+    "gender": "Other",
+    "date_created": "2024-11-17T10:00:00"
+}
+
+5. Delete a User by ID
+- **Endpoint**: DELETE /users/{user_id}
+- **Method**: DELETE
+- **URL Parameters**: 
+  - user_id: Replace {user_id} with the ID of the user you want to delete (e.g., 1).
+- **Output**:
+204 No Content
+
+### Wardrobe Item Management
+
+6. Create Wardrobe Item
+- **Endpoint**: POST /wardrobe_item/
+- **Method**: POST
+- **JSON Input**:
+{
+    "user_id": 1,
+    "clothing_type": "jacket",
+    "for_weather": ["cold", "rainy"],
+    "color": "black",
+    "size": "M",
+    "tags": ["formal", "winter"],
+    "image_url": "https://example.com/image.jpg"
+}
+- **Output**:
+{
+    "item_id": 101,
+    "user_id": 1,
+    "clothing_type": "jacket",
+    "for_weather": ["cold", "rainy"],
+    "color": "black",
+    "size": "M",
+    "tags": ["formal", "winter"],
+    "image_url": "https://example.com/image.jpg"
+}
+
+7. Get Wardrobe Items for a User
+- **Endpoint**: GET /wardrobe_item/user/{user_id}
+- **Method**: GET
+- **URL Parameters**:
+  - user_id: Replace {user_id} with the ID of the user (e.g., 1).
+- **Output**:
+[
+    {
+        "item_id": 101,
+        "user_id": 1,
+        "clothing_type": "jacket",
+        "for_weather": ["cold", "rainy"],
+        "color": "black",
+        "size": "M",
+        "tags": ["formal", "winter"],
+        "image_url": "https://example.com/image.jpg"
+    },
+    ...
+]
+
+8. Get Wardrobe Item by ID
+- **Endpoint**: GET /wardrobe_item/{item_id}
+- **Method**: GET
+- **URL Parameters**:
+  - item_id: Replace {item_id} with the ID of the wardrobe item (e.g., 101).
+- **Output**:
+{
+    "item_id": 101,
+    "user_id": 1,
+    "clothing_type": "jacket",
+    "for_weather": ["cold", "rainy"],
+    "color": "black",
+    "size": "M",
+    "tags": ["formal", "winter"],
+    "image_url": "https://example.com/image.jpg"
+}
+
+9. Update Wardrobe Item
+- **Endpoint**: PUT /wardrobe_item/{item_id}
+- **Method**: PUT
+- **URL Parameters**:
+  - item_id: Replace {item_id} with the ID of the wardrobe item (e.g., 101).
+- **JSON Input**:
+{
+    "clothing_type": "jacket",
+    "for_weather": ["cold", "rainy"],
+    "color": "navy blue",
+    "size": "M",
+    "tags": ["formal", "autumn"],
+    "image_url": "https://example.com/image.jpg"
+}
+- **Output**:
+{
+    "item_id": 101,
+    "user_id": 1,
+    "clothing_type": "jacket",
+    "for_weather": ["cold", "rainy"],
+    "color": "navy blue",
+    "size": "M",
+    "tags": ["formal", "autumn"],
+    "image_url": "https://example.com/image.jpg"
+}
+
+10. Delete Wardrobe Items
+- **Endpoint**: DELETE /wardrobe_item/
+- **Method**: DELETE
+- **JSON Input**:
+{
+    "item_ids": [101, 102]
+}
+- **Output**:
+204 No Content
+
+### Weather Data Management
+
+11. Fetch Weather Data From Database Or API
+- **Endpoint**: POST /weather/
+- **Method**: POST
+- **JSON Input**:
+{
+    "user_id": 1
+}
+- **Output**:
+{[
+    "date": "2024-11-11T00:00:00",
+    "feels_max": 67.8,
+    "feels_min": 55.1,
+    "humidity": 65.3,
+    "location": "new york,us",
+    "precipitation": 0.138,
+    "precipitation_probability": 100,
+    "special_condition": "Rain, Partially cloudy",
+    "temp_max": 67.8,
+    "temp_min": 55.1,
+    "weather_icon": "showers-day",
+    "wind_speed": 16.2
+],}
+
+### Fashion Trend Management
+
+12. Fetch and Update a Fashion Trend
+- **Endpoint**: POST /fashion_trends/update
+- **Method**: POST
+- **JSON Input**:
+{
+    "trend_id": 227,
+    "title": "Denim on Denim",
+    "description": "This trend involves wearing different denim pieces together. It could be a denim jacket paired with jeans or a denim shirt with a denim skirt.",
+    "date_added": "2024-11-17T20:00:56",
+    "tags": ["denim jacket", "jeans", "denim shirt"]
+}
+- **Output**:
+{
+    "trend_id": 227,
+    "title": "Denim on Denim",
+    "description": "Updated successfully",
+    "tags": ["denim jacket", "jeans", "denim shirt"],
+    "date_updated": "2024-11-17T20:30:00"
+}
+
+13. Retrieve Latest Fashion Trends
+- **Endpoint**: GET /fashion_trends/
+- **Method**: GET
+- **Output**:
+[
+    {
+        "trend_id": 227,
+        "title": "Denim on Denim",
+        "description": "This trend involves wearing different denim pieces together. It could be a denim jacket paired with jeans or a denim shirt with a denim skirt.",
+        "tags": ["denim jacket", "jeans", "denim shirt"],
+        "date_added": "2024-11-17T20:00:56"
+    }
+]
+
+### Custom Outfit Management
+
+14. Register a New Outfit
+- **Endpoint**: POST /outfit/
+- **Method**: POST
+- **JSON Input**:
+{
+    "user_id": 8,
+    "occasion": ["casual"],
+    "for_weather": "All Year Around",
+    "clothings": [15, 16],
+    "date_created": "2024-11-17T23:28:13"
+}
+- **Output**:
+{
+    "outfit_id": 6,
+    "user_id": 8,
+    "occasion": ["casual"],
+    "for_weather": "All Year Around",
+    "clothings": [15, 16],
+    "date_created": "2024-11-17T23:28:13"
+}
+
+15. Retrieve Outfits of a User
+- **Endpoint**: GET /outfit/user/{user_id}
+- **Method**: GET
+- **URL Parameters**:
+  - user_id: Replace {user_id} with the ID of the user (e.g., 8).
+- **Output**:
+[
+    {
+        "outfit_id": 6,
+        "user_id": 8,
+        "occasion": ["casual"],
+        "for_weather": "All Year Around",
+        "clothings": [15, 16],
+        "date_created": "2024-11-17T23:28:13"
+    }
+]
+
+16. Update Outfit Information
+- **Endpoint**: PUT /outfit/{outfit_id}
+- **Method**: PUT
+- **URL Parameters**:
+  - item_id: Replace {outfit_id} with the outfit ID (e.g., 6).
+- **JSON Input**:
+{
+    "user_id": 8,
+    "occasion": ["casual", "formal"],
+    "for_weather": "Winter",
+    "clothings": [15, 16],
+    "date_updated": "2024-11-18T10:30:00"
+}
+- **Output**:
+{
+    "outfit_id": 6,
+    "user_id": 8,
+    "occasion": ["casual", "formal"],
+    "for_weather": "Winter",
+    "clothings": [15, 16],
+    "date_updated": "2024-11-18T10:30:00"
+}
+
+17. Delete an Outfit
+- **Endpoint**: DELETE /outfit/{outfit_id}
+- **Method**: DELETE
+- **URL Parameters**:
+  - item_id: Replace {outfit_id} with the ID of the outfit you want to delete (e.g., 6).
+- **Output**: 
+204 No Content
+
+### Outfit Suggestion Management
+
+18. Register a New Outfit Suggestion
+- **Endpoint**: POST /outfits/suggest
+- **Method**: POST
+- **JSON Input**:
+{
+    "outfit_id": 6,
+    "suggestions": [
+        {
+            "gender": "Male",
+            "item_id": 1856,
+            "eBay_link": ["https://www.ebay.com/itm/John-Raphael-Millenium-Three-Piece-Check-Windowpane-Green-Suit-52L-Pants-42X32-/204184384429"],
+            "image_url": "https://i.ebayimg.com/thumbs/images/g/gV0AAOSw8UNjl951/s-l140.jpg"
+        }
+    ],
+    "category": "Unisex",
+    "date_added": "2024-11-18T15:39:45"
+}
+- **Output**:
+{
+    "suggestion_id": 40,
+    "outfit_id": 6,
+    "suggestions": [
+        {
+            "gender": "Male",
+            "item_id": 1856,
+            "eBay_link": ["https://www.ebay.com/itm/John-Raphael-Millenium-Three-Piece-Check-Windowpane-Green-Suit-52L-Pants-42X32-/204184384429"],
+            "image_url": "https://i.ebayimg.com/thumbs/images/g/gV0AAOSw8UNjl951/s-l140.jpg"
+        }
+    ],
+    "category": "Unisex",
+    "date_added": "2024-11-18T15:39:45"
+}
+
+19. Retrieve Outfit Suggestions of a User
+- **Endpoint**: GET /outfits/suggestions/{user_id}
+- **Method**: GET
+- **URL Parameters**:
+  - user_id: Replace {user_id} with the ID of the user (e.g., 8).
+- **Output**:
+[
+    {
+        "suggestion_id": 40,
+        "outfit_id": 6,
+        "suggestions": [
+            {
+                "gender": "Male",
+                "item_id": 1856,
+                "eBay_link": ["https://www.ebay.com/itm/John-Raphael-Millenium-Three-Piece-Check-Windowpane-Green-Suit-52L-Pants-42X32-/204184384429"],
+                "image_url": "https://i.ebayimg.com/thumbs/images/g/gV0AAOSw8UNjl951/s-l140.jpg"
+            }
+        ],
+        "category": "Unisex",
+        "date_added": "2024-11-18T15:39:45"
+    }
+]
+
+20. Delete all Outfit Suggestionx
+- **Endpoint**: DELETE /outfits/suggestions/all
+- **Method**: DELETE
+- **URL Parameters**:
+  - user_id
+- **Output**: 
+204 No Content
+
+21. Delete Outfit Suggestions
+- **Endpoint**: DELETE /outfits/suggestions/
+- **Method**: DELETE
+- **JSON Input**:
+{
+    "suggestion_ids": [101, 102]
+}
+- **Output**:
+204 No Content

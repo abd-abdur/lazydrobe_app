@@ -1,0 +1,10 @@
+*.pyc 
+__pycache__/
+.venv/
+venv/
+.env
+.vscode/
+node_modules/.venv/
+venv/
+flux.py/
+
