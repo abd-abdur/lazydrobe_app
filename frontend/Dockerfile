@@ -23,7 +23,7 @@ COPY --from=builder /app/build /usr/share/nginx/html
 # Copy the custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 8080 (or $PORT if using dynamic port in Cloud Run)
+# Expose port 8080
 EXPOSE 8080
 
 # Run Nginx

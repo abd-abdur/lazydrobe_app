@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './suggestion/PreviousOutfit.css';
-import axios from 'axios';
+import axios from '../api/axiosInstance';
 import { toast } from 'react-toastify';
 import PreviousOutfitItem from './suggestion/PreviousOutfitItem';
 import PreviousOutfitsControls from './suggestion/PreviousOutfitControls';

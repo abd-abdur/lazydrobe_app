@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './CreateOutfitModal.css';
-import axios from 'axios';
+import axios from '../api/axiosInstance';
 
 const CreateOutfitModal = ({ closeModal, wardrobeItems, userInfo, setOutfitSuggestions }) => {
   const [selectedItems, setSelectedItems] = useState([]);

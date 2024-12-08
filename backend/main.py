@@ -1,18 +1,18 @@
 # main.py
 
-from fastapi import FastAPI, HTTPException, Depends, status, BackgroundTasks, Request, Body
+from fastapi import FastAPI, HTTPException, Depends, status, BackgroundTasks, Request, Body, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, AnyHttpUrl
 from sqlalchemy import create_engine
+from fastapi.exceptions import RequestValidationError  
+from fastapi.responses import JSONResponse 
 from sqlalchemy.orm import sessionmaker, Session
 from typing import List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 import requests
 import logging
-from fastapi import BackgroundTasks 
-from pydantic import AnyHttpUrl 
 
 # Import models from models.py
 from models import Base, User, EcommerceProduct, WardrobeItem, Outfit, FashionTrend, WeatherData, OutfitSuggestion
@@ -62,6 +62,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize APIRouter with a common prefix
+api_router = APIRouter(prefix="/api")
+
 # Pydantic Schemas
 
 class UserBase(BaseModel):
@@ -74,7 +77,7 @@ class UserBase(BaseModel):
     weight: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
 
 class UserCreate(UserBase):
@@ -92,7 +95,7 @@ class UserUpdate(BaseModel):
     weight: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
 
 class UserResponse(UserBase):
@@ -100,7 +103,7 @@ class UserResponse(UserBase):
     date_joined: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
 
 # Login Schemas
@@ -116,13 +119,14 @@ class LoginResponse(BaseModel):
     email: EmailStr
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
 
 # Weather Schemas
 
 class WeatherRequest(BaseModel):
     user_id: int 
+
 
 class WeatherResponse(BaseModel):
     date: datetime
@@ -139,7 +143,8 @@ class WeatherResponse(BaseModel):
     weather_icon: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
+
 
 class FashionTrendResponse(BaseModel):
     trend_id: int
@@ -148,7 +153,8 @@ class FashionTrendResponse(BaseModel):
     date_added: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
+
 
 # Wardrobe Item Schemas
 
@@ -161,7 +167,7 @@ class WardrobeItemBase(BaseModel):
     image_url: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
 
 class WardrobeItemCreate(WardrobeItemBase):
@@ -177,7 +183,9 @@ class WardrobeItemUpdate(BaseModel):
     image_url: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
+
+
 class WardrobeItemResponse(WardrobeItemBase):
     item_id: int
     clothing_type: str
@@ -188,9 +196,10 @@ class WardrobeItemResponse(WardrobeItemBase):
     image_url: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
-# Outfit
+
+# Outfit Schemas
 
 class OutfitBase(BaseModel):
     occasion: Optional[List[str]] = None
@@ -198,8 +207,13 @@ class OutfitBase(BaseModel):
     clothings: Optional[List[int]] = None
     source_url: Optional[str] = None
 
+    class Config:
+        from_attributes = True  # Updated for Pydantic V2
+
+
 class OutfitCreate(OutfitBase):
     user_id: int
+
 
 class OutfitResponse(OutfitBase):
     outfit_id: int
@@ -208,14 +222,18 @@ class OutfitResponse(OutfitBase):
     for_weather: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
+
 
 class OutfitUpdate(BaseModel):
     occasion: Optional[List[str]] = None
     for_weather: Optional[str] = None
 
+    class Config:
+        from_attributes = True  # Updated for Pydantic V2
 
-# Outfit Suggestion - it is working now
+
+# Outfit Suggestion Schemas
 
 class OutfitComponent(BaseModel):
     clothing_type: str
@@ -226,7 +244,7 @@ class OutfitComponent(BaseModel):
     gender: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
 
 class OutfitSuggestionResponse(BaseModel):
@@ -237,10 +255,12 @@ class OutfitSuggestionResponse(BaseModel):
     image_url: Optional[AnyHttpUrl] = None
 
     class Config:
-        orm_mode = True
-        
+        from_attributes = True  # Updated for Pydantic V2
+
+
 class OutfitSuggestionRequest(BaseModel):
     user_id: int
+
 
 class OutfitSuggestionCreateResponse(BaseModel):
     suggestion_id: int
@@ -250,9 +270,9 @@ class OutfitSuggestionCreateResponse(BaseModel):
     image_url: Optional[AnyHttpUrl] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic V2
 
-        
+
 # Dependency to get DB session
 def get_db():
     db = SessionLocal()
@@ -283,6 +303,7 @@ def get_api_key(key_name: str) -> str:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=f"{key_name} not found in environment variables.")
     return api_key
+
 
 def fetch_weather_data_from_db(location: str, user_id: Optional[int] = None) -> List[dict]:
     today = datetime.utcnow().date()
@@ -372,7 +393,6 @@ def fetch_weather_data(api_key: str, location: str) -> List[dict]:
     return weather_entries
 
 
-
 def insert_weather_data_to_db(data: List[dict], user_id: Optional[int] = None):
     """
     Inserts or updates weather data into the database.
@@ -426,13 +446,11 @@ def insert_weather_data_to_db(data: List[dict], user_id: Optional[int] = None):
         db.close()
 
 
-
-
 # API Routes
 
 ## User Registration
 
-@app.post("/users/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@api_router.post("/users/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     logger.info(f"Creating user with email: {user.email}")
 
@@ -474,10 +492,9 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return db_user
 
 
-
 ## User Login
 
-@app.post("/login", response_model=LoginResponse)
+@api_router.post("/login", response_model=LoginResponse)
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     logger.info(f"Attempting login for email: {request.email}")
 
@@ -500,7 +517,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
 
 ## Get User by ID
 
-@app.get("/users/{user_id}", response_model=UserResponse)
+@api_router.get("/users/{user_id}", response_model=UserResponse)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     logger.info(f"Fetching user with ID: {user_id}")
 
@@ -515,7 +532,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 ## Update User Information
 
-@app.put("/users/{user_id}", response_model=UserResponse)
+@api_router.put("/users/{user_id}", response_model=UserResponse)
 def update_user(user_id: int, user_update: UserUpdate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     logger.info(f"Updating user with ID: {user_id}")
     logger.debug(f"Update data received: {user_update.dict()}")
@@ -572,7 +589,7 @@ def update_user(user_id: int, user_update: UserUpdate, background_tasks: Backgro
 
 ## Delete User
 
-@app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     logger.info(f"Deleting user with ID: {user_id}")
 
@@ -595,7 +612,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 
 ## Create Wardrobe Item
 
-@app.post("/wardrobe_item/", response_model=WardrobeItemResponse, status_code=status.HTTP_201_CREATED)
+@api_router.post("/wardrobe_item/", response_model=WardrobeItemResponse, status_code=status.HTTP_201_CREATED)
 def create_wardrobe_item(item: WardrobeItemCreate, db: Session = Depends(get_db)):
     logger.info(f"Adding wardrobe item for user ID: {item.user_id}")
 
@@ -622,19 +639,21 @@ def create_wardrobe_item(item: WardrobeItemCreate, db: Session = Depends(get_db)
         logger.error(f"Failed to create wardrobe item: {e}")
         raise HTTPException(status_code=500, detail="Failed to create wardrobe item.")
 
+
 ## Get Wardrobe Items for User
 
-@app.get("/wardrobe_item/user/{user_id}", response_model=List[WardrobeItemResponse])
+@api_router.get("/wardrobe_item/user/{user_id}", response_model=List[WardrobeItemResponse])
 def get_all_wardrobe_items(user_id: int, db: Session = Depends(get_db)):
-    logger.info(f"Fetching wardrobe item for user ID: {user_id}")
+    logger.info(f"Fetching wardrobe items for user ID: {user_id}")
     items = db.query(WardrobeItem).filter(WardrobeItem.user_id == user_id).all()
     if not items:
         raise HTTPException(status_code=404, detail="No wardrobe items found for this user.")
     return items
 
+
 ## Get Wardrobe Item Information
 
-@app.get("/wardrobe_item/{item_id}", response_model=WardrobeItemResponse)
+@api_router.get("/wardrobe_item/{item_id}", response_model=WardrobeItemResponse)
 def read_wardrobe_item(item_id: int, db: Session = Depends(get_db)):
     logger.info(f"Fetching wardrobe item with ID: {item_id}")
 
@@ -649,7 +668,7 @@ def read_wardrobe_item(item_id: int, db: Session = Depends(get_db)):
 
 ## Update Wardrobe Item Information
 
-@app.put("/wardrobe_item/{item_id}", response_model=WardrobeItemResponse)
+@api_router.put("/wardrobe_item/{item_id}", response_model=WardrobeItemResponse)
 def update_wardrobe_item(item_id: int, item_update: WardrobeItemUpdate, db: Session = Depends(get_db)):
     logger.info(f"Updating wardrobe item with ID: {item_id}")
     logger.debug(f"Update data received: {item_update.dict()}")
@@ -679,9 +698,9 @@ def update_wardrobe_item(item_id: int, item_update: WardrobeItemUpdate, db: Sess
 
 ## Delete Wardrobe Item
 
-@app.delete("/wardrobe_item/", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/wardrobe_item/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_wardrobe_item(item_ids: List[int] = Body(..., embed=True), db: Session = Depends(get_db)):
-    logger.info(f"Deleting wardrobe item with IDs: {item_ids}")
+    logger.info(f"Deleting wardrobe items with IDs: {item_ids}")
 
     not_found_items = []
     for item_id in item_ids:
@@ -707,7 +726,7 @@ def delete_wardrobe_item(item_ids: List[int] = Body(..., embed=True), db: Sessio
 
 ## Weather Endpoint
 
-@app.post("/weather/", response_model=List[WeatherResponse], status_code=status.HTTP_200_OK)
+@api_router.post("/weather/", response_model=List[WeatherResponse], status_code=status.HTTP_200_OK)
 def get_weather_data(weather_request: WeatherRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     logger.info(f"Received weather data request for user_id={weather_request.user_id}")
 
@@ -760,7 +779,7 @@ def get_weather_data(weather_request: WeatherRequest, background_tasks: Backgrou
 
 ## Fashion Trends Endpoints
 
-@app.post("/fashion_trends/update", status_code=status.HTTP_202_ACCEPTED)
+@api_router.post("/fashion_trends/update", status_code=status.HTTP_202_ACCEPTED)
 def update_fashion_trends_endpoint(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     Endpoint to trigger the fetching and updating of fashion trends.
@@ -769,7 +788,8 @@ def update_fashion_trends_endpoint(background_tasks: BackgroundTasks, db: Sessio
     logger.info("Fashion trends update initiated via API.")
     return {"message": "Fashion trends update initiated."}
 
-@app.get("/fashion_trends/", response_model=List[FashionTrendResponse], status_code=status.HTTP_200_OK)
+
+@api_router.get("/fashion_trends/", response_model=List[FashionTrendResponse], status_code=status.HTTP_200_OK)
 def get_fashion_trends(db: Session = Depends(get_db)):
     """
     Retrieve the latest fashion trends from the database.
@@ -777,10 +797,11 @@ def get_fashion_trends(db: Session = Depends(get_db)):
     trends = db.query(FashionTrend).order_by(FashionTrend.date_added.desc()).all()
     return trends
 
+
 # Get latest 3 trends
 
-@app.get("/fashion-trends/latest", response_model=List[FashionTrendResponse])
-def get_fashion_trends(db: Session = Depends(get_db)):
+@api_router.get("/fashion-trends/latest", response_model=List[FashionTrendResponse])
+def get_latest_fashion_trends(db: Session = Depends(get_db)):
     logger.info("Fetching the latest three fashion trends")
     trends = db.query(FashionTrend).order_by(FashionTrend.trend_id.desc()).limit(3).all()
     logger.debug(f"Number of trends found: {len(trends)}")
@@ -794,8 +815,10 @@ def get_fashion_trends(db: Session = Depends(get_db)):
     
     return trends
 
+
 ## Create Custom Outfit
-@app.post("/outfit/", response_model=OutfitResponse, status_code=status.HTTP_201_CREATED)
+
+@api_router.post("/outfit/", response_model=OutfitResponse, status_code=status.HTTP_201_CREATED)
 def create_outfit(outfit: OutfitCreate, db: Session = Depends(get_db)):
     """
     Create a customized outfit and save it to the database
@@ -818,17 +841,19 @@ def create_outfit(outfit: OutfitCreate, db: Session = Depends(get_db)):
         logger.error(f"Failed to create outfit: {e}")
         raise HTTPException(status_code=400, detail="Failed to create outfit")
 
+
 ## Get Outfits for User
 
-@app.get("/outfit/user/{user_id}", response_model=List[OutfitResponse])
+@api_router.get("/outfit/user/{user_id}", response_model=List[OutfitResponse])
 def get_all_outfits(user_id: int, db: Session = Depends(get_db)):
     logger.info(f"Fetching outfits for user ID: {user_id}")
     outfits = db.query(Outfit).filter(Outfit.user_id == user_id).all()
     return outfits
 
+
 ## Get Outfit Information
 
-@app.get("/outfit/{outfit_id}", response_model=OutfitResponse)
+@api_router.get("/outfit/{outfit_id}", response_model=OutfitResponse)
 def read_outfit(outfit_id: int, db: Session = Depends(get_db)):
     logger.info(f"Fetching outfit with ID: {outfit_id}")
     outfit = db.query(Outfit).filter(Outfit.outfit_id == outfit_id).first()
@@ -840,9 +865,10 @@ def read_outfit(outfit_id: int, db: Session = Depends(get_db)):
     logger.info(f"Outfit with ID {outfit_id} retrieved successfully.")
     return outfit
 
+
 ## Delete Outfits
 
-@app.delete("/outfit/{outfit_id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/outfit/{outfit_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_outfit(outfit_id: int, db: Session = Depends(get_db)):
     logger.info(f"Deleting outfit with ID: {outfit_id}")
 
@@ -861,9 +887,10 @@ def delete_outfit(outfit_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Failed to delete outfit with ID {outfit_id}: {str(e)}")
     return
 
+
 ## Update Outfit Information
 
-@app.put("/outfit/{outfit_id}", response_model=OutfitResponse)
+@api_router.put("/outfit/{outfit_id}", response_model=OutfitResponse)
 def update_outfit(outfit_id: int, outfit_update: OutfitUpdate, db: Session = Depends(get_db)):
     logger.info(f"Updating outfit with ID: {outfit_id}")
 
@@ -890,9 +917,9 @@ def update_outfit(outfit_id: int, outfit_update: OutfitUpdate, db: Session = Dep
     return outfit
 
 
-# Outfit suggest
+# Outfit Suggestion Endpoints
 
-@app.post("/outfits/suggest", response_model=OutfitSuggestionCreateResponse, status_code=status.HTTP_201_CREATED)
+@api_router.post("/outfits/suggest", response_model=OutfitSuggestionCreateResponse, status_code=status.HTTP_201_CREATED)
 def suggest_outfit_endpoint(request: OutfitSuggestionRequest, db: Session = Depends(get_db)):
     """
     Suggests outfits for the user based on current weather and fashion trends.
@@ -912,9 +939,7 @@ def suggest_outfit_endpoint(request: OutfitSuggestionRequest, db: Session = Depe
         raise HTTPException(status_code=500, detail="Failed to suggest outfits.")
 
 
-from sqlalchemy.orm import joinedload
-
-@app.get("/outfits/suggestions/{user_id}", response_model=List[OutfitSuggestionResponse])
+@api_router.get("/outfits/suggestions/{user_id}", response_model=List[OutfitSuggestionResponse])
 def get_outfit_suggestions(user_id: int, db: Session = Depends(get_db)):
     logger.info(f"Fetching outfit suggestions for user ID: {user_id}")
     suggestions = db.query(OutfitSuggestion).filter(OutfitSuggestion.user_id == user_id).all()
@@ -929,7 +954,8 @@ def get_outfit_suggestions(user_id: int, db: Session = Depends(get_db)):
     
     return suggestions
 
-@app.delete("/outfits/suggestions/all", status_code=status.HTTP_204_NO_CONTENT)
+
+@api_router.delete("/outfits/suggestions/all", status_code=status.HTTP_204_NO_CONTENT)
 def delete_all_outfit_suggestions(user_id: int, db: Session = Depends(get_db)):
     logger.info(f"Deleting all outfit suggestions for user_id={user_id}")
     
@@ -945,22 +971,23 @@ def delete_all_outfit_suggestions(user_id: int, db: Session = Depends(get_db)):
     logger.info(f"Deleted {deleted} outfit suggestion(s) for user_id={user_id}.")
     return
 
+
 ## Delete Outfit Suggestion
 
-@app.delete("/outfits/suggestions/", status_code=status.HTTP_204_NO_CONTENT)
-def delete_wardrobe_item(suggestion_id: List[int] = Body(..., embed=True), db: Session = Depends(get_db)):
-    logger.info(f"Deleting outfit suggestions with IDs: {suggestion_id}")
+@api_router.delete("/outfits/suggestions/", status_code=status.HTTP_204_NO_CONTENT)
+def delete_outfit_suggestions(suggestion_ids: List[int] = Body(..., embed=True), db: Session = Depends(get_db)):
+    logger.info(f"Deleting outfit suggestions with IDs: {suggestion_ids}")
 
     not_found_items = []
-    for id in suggestion_id:
+    for id in suggestion_ids:
         suggestion = db.query(OutfitSuggestion).filter(OutfitSuggestion.suggestion_id == id).first()
         if not suggestion:
-            not_found_items.append(suggestion_id)
+            not_found_items.append(id)
         else:
             try:
                 db.delete(suggestion)
                 db.commit()
-                logger.info(f"Outfit suggestions with IDs {id} deleted successfully.")
+                logger.info(f"Outfit suggestion with ID {id} deleted successfully.")
             except Exception as e:
                 db.rollback()
                 logger.error(f"Failed to delete outfit suggestion with ID {id}: {e}")
@@ -972,10 +999,15 @@ def delete_wardrobe_item(suggestion_id: List[int] = Body(..., embed=True), db: S
 
     return
 
-## Exception Handlers
 
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import RequestValidationError
+# Health Check Endpoint
+
+@app.get("/api/health", status_code=200)
+def health_check():
+    return {"status": "OK"}
+
+
+# Exception Handlers
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
@@ -993,6 +1025,11 @@ async def generic_exception_handler(request: Request, exc: Exception):
         content={"detail": "An unexpected error occurred."},
     )
 
+
+# Include the router in the main app
+app.include_router(api_router)
+
+# Run the application
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8080)

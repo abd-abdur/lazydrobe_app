@@ -4,12 +4,12 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../App.css'; // Ensure this imports any global styles if needed
 import './styling/OutfitSuggestions.css';
-import axios from 'axios';
 import OutfitGenerationModal from './suggestion/OutfitGenerationModal';
 import LoadingPopup from './LoadingPopup'; // Import the LoadingPopup component
 import { useHistory } from 'react-router-dom'; 
 import { toast } from 'react-toastify'; 
 import { FaMagic, FaArchive } from 'react-icons/fa';
+import axios from '../api/axiosInstance';
 
 const OutfitSuggestions = ({
   outfits,
