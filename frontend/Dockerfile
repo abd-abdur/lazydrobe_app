@@ -23,11 +23,8 @@ COPY --from=builder /app/build /usr/share/nginx/html
 # Copy the custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Verify nginx.conf
-RUN cat /etc/nginx/conf.d/default.conf
-
-# Expose port 8080
-EXPOSE 8080
+# Expose port 80 (standard web port)
+EXPOSE 80
 
 # Run Nginx
 CMD ["nginx", "-g", "daemon off;"]
