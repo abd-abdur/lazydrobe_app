@@ -17,3 +17,4 @@ alembic>=1.14.0
 cachetools>=5.5.0
 fal-client
 aiohttp>=3.9.0
+spacy[en_core_web_sm]
