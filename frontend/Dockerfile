@@ -1,4 +1,4 @@
-# Stage 1: Build React app
+# Build stage
 FROM node:16-alpine AS builder
 
 # Set working directory
@@ -14,7 +14,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Stage 2: Serve with Nginx
+# Runtime stage (Nginx)
 FROM nginx:alpine
 
 # Copy the built React app from the builder stage to Nginx's HTML directory
@@ -22,6 +22,9 @@ COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy the custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Verify nginx.conf
+RUN cat /etc/nginx/conf.d/default.conf
 
 # Expose port 8080
 EXPOSE 8080
