@@ -26,7 +26,7 @@ COPY --from=builder /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
-EXPOSE 80
+EXPOSE ${PORT}
 
-# Start nginx
+# Command to run nginx, listening on the dynamic port
 CMD ["nginx", "-g", "daemon off;"]
