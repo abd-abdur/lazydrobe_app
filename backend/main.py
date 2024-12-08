@@ -54,6 +54,10 @@ app = FastAPI(
     version="1.0.0"
 )
 
+origins = [
+    "https://lazydrobe-frontend-23933613008.us-central1.run.app",
+]
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
