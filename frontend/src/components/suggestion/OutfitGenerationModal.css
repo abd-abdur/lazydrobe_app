@@ -21,22 +21,34 @@
     max-width: 1200px; /* Increased max-width */
     position: relative;
     text-align: center;
-    /* Allow scrolling if content overflows */
-    overflow-y: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row; /* Change to row to place items side by side */
+    max-height: 95vh; /* Increase the height to fit within the screen */
+    overflow: hidden; /* Prevent scrollbar */
   }
   
   .outfit-modal-close-button {
     position: absolute;
-    top: 15px; 
-    right: 20px;
+    top: -30px; /* Raise the close button closer to the top */
+    right: -40px; /* Position it to the right of the sidebar */
     background: none;
     border: none;
     font-size: 1.8em;
     cursor: pointer;
     color: #888888;
+    z-index: 1003; /* Ensure the close button is above the sidebar */
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .outfit-modal-close-button:hover .close-icon {
+    color: #800080; /* Purple color */
+    transform: rotate(90deg); /* Spinning effect */
+  }
+  
+  .close-icon {
+    transition: transform 0.3s ease-in-out;
   }
   
   .outfit-modal-close-button:hover {
@@ -45,22 +57,29 @@
   
   .outfit-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row; /* Change to row to place items side by side */
+    align-items: center; /* Center items vertically */
+    width: 100%; /* Ensure the container takes full width */
   }
   
   .image-section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 1; /* Ensure the image section stretches to match the height of the sidebar */
+    max-width: 60%; /* Adjust max-width to fit the image within the screen */
+    align-self: center; /* Center the image section vertically */
+    overflow: hidden; /* Prevent scrollbar */
+    margin-top: 0; /* Remove top margin */
+    height: auto; /* Ensure the image section height is set to auto */
   }
   
   .generated-image {
     width: 100%;
-    max-width: 1000px; /* Increased max-width for a larger image */
+    max-width: 100%; /* Ensure the image fits within the section */
     height: auto;
     border-radius: 8px;
-    object-fit: cover; /* Changed to cover for better image filling */
+    object-fit: contain; /* Ensure the image fits within the section without being cut off */
     margin-bottom: 20px; /* Increased margin for spacing */
   }
   
@@ -113,10 +132,19 @@
     .outfit-modal-content {
       max-width: 90%;
       padding: 20px;
+      flex-direction: column; /* Stack items vertically on small screens */
     }
   
     .generated-image {
       max-width: 100%;
       margin-bottom: 15px;
     }
+  }
+
+  .section-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
   }

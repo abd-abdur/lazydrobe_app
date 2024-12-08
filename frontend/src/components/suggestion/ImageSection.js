@@ -1,25 +1,9 @@
-// src/components/suggestion/OutfitGenerationModal.js
-
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './OutfitGenerationModal.css';
-import { FaMagic, FaArchive, FaShoppingCart, FaArrowLeft, FaCheckSquare, FaTimes, FaTrashAlt, FaTimesCircle } from 'react-icons/fa';
-import OutfitGenSidebar from './OutfitGenSidebar';
-import ImageSection from './ImageSection';
+import { FaShoppingCart } from 'react-icons/fa';
 
-const CloseButton = ({ onClick }) => (
-  <button className="outfit-modal-close-button" onClick={onClick}>
-    <FaTimes className="close-icon" />
-  </button>
-);
-
-CloseButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-};
-
-const OutfitGenerationModal = ({ outfit, closeModal }) => {
-
-  if (!outfit) return null;
+const ImageSection = ({ outfit }) => {
 
   // Function to categorize links
   const categorizeLinks = () => {
@@ -82,21 +66,18 @@ const OutfitGenerationModal = ({ outfit, closeModal }) => {
   const categories = categorizeLinks();
 
   return (
-    <div className="outfit-modal-overlay" onClick={closeModal}>
-      <div className="outfit-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="outfit-container" style={{ display: 'flex', height: '100%' }}>
-          <ImageSection outfit={outfit} />
-          <OutfitGenSidebar outfit={outfit} />
-          <CloseButton onClick={closeModal} />
-        </div>
-      </div>
+    <div className="image-section">
+      <div className="section-header">Preview</div>
+      <img src={outfit.image_url} alt="Generated Outfit" className="generated-image" />
+      <p className="info-text">
+        The image is AI-generated and the original clothing might not fully match what you are seeing now.
+      </p>
     </div>
   );
 };
 
-OutfitGenerationModal.propTypes = {
+ImageSection.propTypes = {
   outfit: PropTypes.object.isRequired,
-  closeModal: PropTypes.func.isRequired,
 };
 
-export default OutfitGenerationModal;
+export default ImageSection;
