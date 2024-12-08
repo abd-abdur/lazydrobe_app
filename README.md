@@ -88,10 +88,11 @@ Before running the project, ensure you have the following installed:
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/lazydrobe-online.git
-cd lazydrobe-online
-
+git clone https://github.com/abd-abdur/lazydrobe_app.git
+cd lazydrobe_app
 ```
+Note: Replace username with your GitHub username if you forked the repository.
+
 ### Step 2: Backend Setup
 
 1. **Navigate to the backend directory:**
@@ -99,29 +100,43 @@ cd lazydrobe-online
    ```bash
    cd backend
    ```
+2. (Optional) Set Up a Virtual Environment
+Recommended to use a virtual environment to isolate project dependencies
+```
+python -m venv .venv
+```
+On Windows: 
+```
+.\.venv\Scripts\activate
+```
+On macOS/Linux: source 
+```
+.venv/bin/activate
+```
 
-2. **Install Python dependencies:**
+3. **Install Python dependencies:**
 
     ```bash
-   pip install -r requirements.txt
+    pip install -r requirements.txt
+    python -m spacy download en_core_web_sm
    ```
 
-3. **Database Setup:**
+4. **Database Setup:**
 
 - Make sure to set up a PostgreSQL database and configure the connection string in `backend/config.py` (if required).
 - Alternatively, you can use Docker to spin up a PostgreSQL container as part of the `docker-compose.yml` setup.
 
-4. **Run the Backend**
+5. **Run the Backend**
 You can start the FastAPI backend using Uvicorn:
     ```bash
-    uvicorn app.main:app --reload
+    uvicorn main:app --reload
    ```
 This will run the backend on [http://localhost:8000](http://localhost:8000).
 
 
 ### Step 3: Frontend Setup
 
-1. **Navigate to the Frontend directory:**
+1. **(In another terminal) Navigate to the Frontend directory:**
 
    ```bash
    cd frontend
