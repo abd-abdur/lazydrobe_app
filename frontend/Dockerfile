@@ -4,10 +4,8 @@ FROM node:16-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files and install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
 # Copy all frontend files
@@ -19,14 +17,14 @@ RUN npm run build
 # Runtime stage (Nginx)
 FROM nginx:alpine
 
-# Copy built files from builder stage to Nginx directory
+# Copy the built React app from the builder stage to Nginx's HTML directory
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Create a custom nginx configuration
+# Copy the custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080 (or $PORT if using dynamic port in Cloud Run)
+EXPOSE 8080
 
-# Start nginx
+# Run Nginx
 CMD ["nginx", "-g", "daemon off;"]
