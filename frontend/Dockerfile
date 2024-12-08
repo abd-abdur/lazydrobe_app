@@ -1,4 +1,4 @@
-# Build stage
+# Stage 1: Build React app
 FROM node:16-alpine AS builder
 
 # Set working directory
@@ -14,7 +14,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Runtime stage (Nginx)
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
 
 # Copy the built React app from the builder stage to Nginx's HTML directory
