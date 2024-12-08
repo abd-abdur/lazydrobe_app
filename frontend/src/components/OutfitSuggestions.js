@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import '../App.css'; // Ensure this imports any global styles if needed
+import '../App.css';
 import './styling/OutfitSuggestions.css';
 import OutfitGenerationModal from './suggestion/OutfitGenerationModal';
-import LoadingPopup from './LoadingPopup'; // Import the LoadingPopup component
+import LoadingPopup from './LoadingPopup';
 import { useHistory } from 'react-router-dom'; 
 import { toast } from 'react-toastify'; 
 import { FaMagic, FaArchive } from 'react-icons/fa';
-import axios from '../api/axiosInstance';
+import axios from '../api/axiosInstance'; // Correct import
 
 const OutfitSuggestions = ({
   outfits,
@@ -51,10 +51,10 @@ const OutfitSuggestions = ({
     if (isGenerating) return;
 
     setIsGenerating(true);
-    setTimeLeft(10); // Set countdown to 7 seconds
+    setTimeLeft(10); // Set countdown to 10 seconds
     setLoading(true);
     try {
-      const response = await axios.post('/outfits/suggest', { user_id: userInfo.user_id });
+      const response = await axios.post('/outfits/suggest', { user_id: userInfo.user_id }); // Correct endpoint
       setOutfitSuggestions([response.data, ...outfits]);
       setCurrentOutfit(response.data);
       // Do not open the modal here; wait for countdown to finish
