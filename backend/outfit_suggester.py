@@ -422,7 +422,7 @@ def determine_clothing_types(weather: WeatherData, trends: List[FashionTrend]) -
 
     # Warm Weather (> 75°F)
     if temp_max > 75:
-        clothing_types.update(['Shorts', 'Flats', 'Heels', 'Jeans', 'T-Shirt', 'Pants', 'Tank Top', 'Sandals', 'Shoe', 'Sneakers', 'Skirt', 'Blouse', 'Dress', 'Camisole', 'Crop Top'])
+        clothing_types.update(['Shorts', 'Swimwear', 'Flats', 'Heels', 'Jeans', 'T-Shirt', 'Pants', 'Tank Top', 'Sandals', 'Shoe', 'Sneakers', 'Skirt', 'Blouse', 'Dress', 'Camisole', 'Crop Top'])
 
     # Mild Weather (60°F to 75°F)
     if 60 < temp_max <= 75:
