@@ -858,9 +858,13 @@ def fetch_and_update_fashion_trends(db: Session):
         "https://www.glamour.com/story/2024-fashion-trends",
         "https://theadultman.com/fashion-and-style/mens-fashion-trends",
         "https://www.whowhatwear.com/fashion/trends/autumn-winter-2024-fashion-trends",
-        "https://www.nordstrom.com/browse/content/fall-fashion-trends",
+        "https://www.whowhatwear.com/best-uniqlo-items-right-now",
+        "https://www.nordstrom.com/browse/content/blog/winter-closet-essentials?srsltid=AfmBOooYKNtWtQTSrsnA5J8oTxzOgS3CaUiAxES3lnts4-PZSkDfIZAK",
         "https://www.thewardrobeconsultant.com/blog/fall-fashion-trends-2024-style-guide",
         "https://www.whowhatwear.com/fall-winter-fashion-trends-2024",
+        "https://www.gq.com/story/mens-fashion-trends-predictions-2024",
+        "https://keepcalmandchiffon.com/blog/winter-outfits/",
+        "https://stylegirlfriend.com/mens-winter-outfits/",
     ]
 
     logger.info("Starting to fetch articles...")

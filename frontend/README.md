@@ -75,15 +75,18 @@ Install the required packages from the requirements.txt file.
 pip install -r requirements.txt
 ```
 
+### 5. Create a .env file in the project root directory
+Add the following fields:
+- REACT_APP_VISUAL_CROSSING_API_KEY
 
-### 5. Run the backend
+### 6. Run the backend
 
 Use the following command to start the application:
 ```
 uvicorn main:app --reload
 ```
 
-### 6. Start the Application
+### 7. Start the Application
 Start the development server:
 ```
 npm start

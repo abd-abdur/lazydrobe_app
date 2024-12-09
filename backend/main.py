@@ -801,13 +801,13 @@ def get_fashion_trends(db: Session = Depends(get_db)):
     trends = db.query(FashionTrend).order_by(FashionTrend.date_added.desc()).all()
     return trends
 
-
-# Get latest 3 trends
+import random
+# Get random 3 from the latest 15 trends
 
 @api_router.get("/fashion-trends/latest", response_model=List[FashionTrendResponse])
 def get_latest_fashion_trends(db: Session = Depends(get_db)):
     logger.info("Fetching the latest three fashion trends")
-    trends = db.query(FashionTrend).order_by(FashionTrend.trend_id.desc()).limit(3).all()
+    trends = db.query(FashionTrend).order_by(FashionTrend.trend_id.desc()).limit(15).all()
     logger.debug(f"Number of trends found: {len(trends)}")
     
     if not trends:
@@ -817,7 +817,10 @@ def get_latest_fashion_trends(db: Session = Depends(get_db)):
     for trend in trends:
         logger.debug(f"Trend ID: {trend.trend_id}, Name: {trend.trend_name}, Date Added: {trend.date_added}")
     
-    return trends
+    random_trends = random.sample(trends, min(len(trends), 3))
+    logger.info(f"Selected {len(random_trends)} random trends from the latest 15.")
+
+    return random_trends
 
 
 ## Create Custom Outfit

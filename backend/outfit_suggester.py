@@ -723,15 +723,19 @@ def generate_outfit_image(outfit_components: List[Dict[str, Any]], height: str, 
         
         # Compose the prompt
         prompt = (
-            f"Create a fullbody image of a stylish individual of height {height} and weight {weight}, if available wearing the following pieces:\n\n" +
+            f"Create a full-body image, from head to shoes, of **only one individual** with an estimated real body size based on the height of {height} and weight of {weight}." +
+            "The individual should be wearing **all of the following clothing items and accessories**, combined into a cohesive and fashionable outfit:\n" +
             "\n".join([f"{idx + 1}. {desc}" for idx, desc in enumerate(clothing_descriptions)]) +
-            "\n\n"
-            "Combine items into a cohesive and fashionable outfit with accessory, if provided on an individual. "
-            "The individual should have a confident and relaxed pose, evoking a modern and elegant aesthetic. "
-            "If image url is provided, recreate the item in the image on the individual, with outfit description as aid."
-            "If image url is not provided, make sure you read the outfit names properly and work hard to accurately create the outfit specially the color"
-            "Use a neutral studio background with soft lighting to highlight the outfit. Ensure the outfit fits naturally and realistically on the individual, "
-            "emphasizing the textures and styles of the clothing items."
+            "\n\n"+
+            "The individual should have a confident and relaxed pose showcases the outfit naturally. "+
+            "Key requirements:"+
+            "Display the entire person from **head to shoes**, ensuring all elements of the outfit are visible and appropriately scaled to fit."+
+            "**Every clothing item listed must be included** in the outfit, accurately interpreted and styled."+
+            "Use soft, neutral studio lighting to highlight the textures, colors, and details of the clothing."+
+            "Ensure the outfit fits naturally and realistically on the individual, emphasizing a modern and elegant aesthetic."+
+            "The background must remain neutral to avoid distracting from the outfit."+
+            "If an image URL is provided for any clothing item, recreate it accurately on the individual."+
+            "If no URL is provided, rely solely on the description, prioritizing precise colors, textures, and styles."
         )
 
         # Function to handle log updates
