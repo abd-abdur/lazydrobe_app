@@ -422,15 +422,15 @@ def determine_clothing_types(weather: WeatherData, trends: List[FashionTrend]) -
 
     # Warm Weather (> 75°F)
     if temp_max > 75:
-        clothing_types.update(['Shorts', 'Swimwear', 'Flats', 'Heels', 'Jeans', 'T-Shirt', 'Pants', 'Tank Top', 'Sandals', 'Shoe', 'Sneakers', 'Skirt', 'Blouse', 'Dress', 'Camisole', 'Crop Top'])
+        clothing_types.update(['Shorts', 'Swimwear', 'Flats', 'Polo Shirt', 'Heels', 'Jeans', 'T-Shirt', 'Pants', 'Tank Top', 'Sandals', 'Shoe', 'Sneakers', 'Skirt', 'Blouse', 'Dress', 'Camisole', 'Crop Top'])
 
     # Mild Weather (60°F to 75°F)
     if 60 < temp_max <= 75:
-        clothing_types.update(['Jeans', 'Heels', 'Boots', 'T-Shirt', 'Shoe', 'Pants', 'Sneakers', 'Light Jacket', 'Blouse', 'Skirt', 'Dress', 'Leggings', 'Capri Pants'])
+        clothing_types.update(['Jeans', 'Heels', 'Boots', 'T-Shirt', 'Shoe', 'Polo Shirt', 'Pants', 'Sneakers', 'Light Jacket', 'Blouse', 'Skirt', 'Dress', 'Leggings', 'Capri Pants'])
 
     # Cool Weather (35°F to 60°F)
     if 35 < temp_max <= 60:
-        clothing_types.update(['Sweater', 'Shoe', 'Boots', 'T-Shirt', 'Sneakers', 'Jacket', 'Coat', 'Pants', 'Jeans', 'Hoodie', 'Cardigan', 'Thermal Wear'])
+        clothing_types.update(['Sweater', 'Shoe', 'Boots', 'T-Shirt', 'Polo Shirt', 'Sneakers', 'Jacket', 'Coat', 'Pants', 'Jeans', 'Hoodie', 'Cardigan', 'Thermal Wear'])
 
     # Special Weather Conditions
     if 'windy' in condition:
