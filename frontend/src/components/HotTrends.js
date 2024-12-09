@@ -7,21 +7,22 @@ const HotTrends = ({ onTrendClick }) => {
   const [trends, setTrends] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchTrends = async () => {
-      try {
-        const response = await axios.get('/fashion-trends/latest');
-        if (Array.isArray(response.data)) {
-          setTrends(response.data);
-        } else {
-          setError('Data is not in the expected format.');
-        }
-      } catch (err) {
-        console.error('Error fetching trends:', err);
-        setError('Unable to fetch trends. Please try again later.');
+  const fetchTrends = async () => {
+    try {
+      const response = await axios.get('/fashion-trends/latest');
+      if (Array.isArray(response.data)) {
+        setTrends(response.data);
+      } else {
+        setError('Data is not in the expected format.');
       }
-    };
+      console.log("Trends:", response.data)
+    } catch (err) {
+      console.error('Error fetching trends:', err);
+      setError('Unable to fetch trends. Please try again later.');
+    }
+  };
 
+  useEffect(() => {
     fetchTrends();
   }, []);
 

@@ -71,13 +71,7 @@ const FiveDayWeather = ({ userInfo, weather, updateWeather }) => {
                   <p><span className="label">Wind Speed</span></p>
                   <p><span className="data">{day.wind_speed} mph</span></p>
                 </div>
-                <div className="humidity">
-                  <p><span className="label">Humidity</span></p>
-                  <p><span className="data">{day.humidity}%</span></p>
-                </div>
                 <div className="precipitation">
-                  <p><span className="label">Precipitation</span></p>
-                  <p><span className="data">{day.precipitation} inches</span></p>
                   <p><span className="label">Precipitation Probability</span></p>
                   <p><span className="data">{day.precipitation_probability}%</span></p>
                 </div>

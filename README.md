@@ -121,12 +121,20 @@ On macOS/Linux: source
     python -m spacy download en_core_web_sm
    ```
 
-4. **Database Setup:**
+4. **Create a .env file:**
+Add the following fields:
+- DATABASE_URL
+- OpenAI_API_Key
+- VISUAL_CROSSING_API_KEY
+- EBAY_APP_ID
+- FAL_KEY
+
+5. **Database Setup:**
 
 - Make sure to set up a PostgreSQL database and configure the connection string in `backend/config.py` (if required).
 - Alternatively, you can use Docker to spin up a PostgreSQL container as part of the `docker-compose.yml` setup.
 
-5. **Run the Backend**
+6. **Run the Backend**
 You can start the FastAPI backend using Uvicorn:
     ```bash
     uvicorn main:app --reload
@@ -147,7 +155,12 @@ This will run the backend on [http://localhost:8000](http://localhost:8000).
     ```bash
    npm install
    ```
-3. **Run the Frontend**
+
+3. **Create a .env file:**
+Add the following fields:
+- REACT_APP_VISUAL_CROSSING_API_KEY
+
+4. **Run the Frontend**
 You can start the FastAPI backend using Uvicorn:
     ```bash
     npm start
