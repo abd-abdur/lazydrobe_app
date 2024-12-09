@@ -723,7 +723,7 @@ def generate_outfit_image(outfit_components: List[Dict[str, Any]], height: str, 
         
         # Compose the prompt
         prompt = (
-            f"Create an image of a stylish individual of height {height} and weight {weight}, if available wearing the following outfit:\n\n" +
+            f"Create a fullbody image of a stylish individual of height {height} and weight {weight}, if available wearing the following pieces:\n\n" +
             "\n".join([f"{idx + 1}. {desc}" for idx, desc in enumerate(clothing_descriptions)]) +
             "\n\n"
             "Combine items into a cohesive and fashionable outfit with accessory, if provided on an individual. "
