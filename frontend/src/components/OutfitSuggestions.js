@@ -52,6 +52,7 @@ const OutfitSuggestions = ({
 
     setIsGenerating(true);
     setTimeLeft(7); //7 seconds
+    console.log("timeLeft set to 7 seconds");
     setLoading(true);
     try {
       const response = await axios.post('/outfits/suggest', { user_id: userInfo.user_id }); // Correct endpoint
