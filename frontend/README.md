@@ -128,6 +128,8 @@ lazydrobe/
 │   │   ├── Register.js                    # Register page screen
 │   │   ├── Navbar.js                      # Navigation bar component
 │   │   ├── Home.js                        # Home page screen
+│   │   ├── HotTrends.jsx                  # Hot trends component
+│   │   ├── HotTrendsExplaination.jsx      # Hot trends component
 │   │   ├── FiveDayWeather.jsx             # Weather component
 │   │   ├── Wardrobe.js                    # Main wardrobe page screen
 │   │   ├── OutfitSuggestions.js           # Main DressMeUp page screen
@@ -250,11 +252,6 @@ const fetchUserData = async (userId) => {
    - **Component**: `OutfitSuggestions.js`
    - **Action**: User clicks a button to generate outfit suggestions based on current weather.
    - **API Call**: `GET /outfits/` or `POST /weather/`
-
-3. **Search Functionality to Query the Database**
-   - **Component**: `Wardrobe.js`
-   - **Action**: User enters a search term to filter wardrobe items.
-   - **API Call**: `GET /clothing_items/?search=term`
 
 #### Implementation Details:
 - **Forms**: Utilize controlled components to handle user input and manage form submissions.
