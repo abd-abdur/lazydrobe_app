@@ -79,7 +79,7 @@ const Profile = ({ userInfo, onUpdate, onDelete }) => {
               This action cannot be undone.
             </p>
             <div className="modal-buttons">
-              <button onClick={handleDeleteAccount} className="confirm-button">
+              <button onClick={onDelete} className="confirm-button">
                 <FaExclamationTriangle className="icon" /> Yes
               </button>
               <button onClick={closeConfirmationModal} className="cancel-button">
