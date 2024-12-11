@@ -136,6 +136,18 @@ function App() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    setLoading(true);
+    try {
+      await axios.delete(`/users/${userInfo.user_id}`);
+      handleLogout();
+    } catch (err) {
+      console.error("Error deleting account:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handling Wardrobe Items Data
   const handleAddWardrobeItem = async (newWardrobeItem) => {
     setLoading(true);
@@ -385,7 +397,7 @@ function App() {
                             <Profile
                               userInfo={userInfo}
                               onUpdate={handleUpdateUser}
-                              onLogout={handleLogout}
+                              onDelete={handleDeleteAccount}
                             />
                           ) : (
                             <p>Please log in to view your profile.</p>
