@@ -39,6 +39,7 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn && userInfo) {
+      fetchUserData(userInfo.user_id);
       fetchWardrobeItems();
       fetchOutfitSuggestions();
       fetchOutfits();
