@@ -8,27 +8,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaExclamationTriangle, FaTimes, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
-const Profile = ({ userInfo, onUpdate, onLogout }) => {
+const Profile = ({ userInfo, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const handleDeleteAccount = async () => {
-    setIsModalOpen(false);
-    setLoading(true);
-    try {
-      await axios.delete(`/users/${userInfo.user_id}`);
-      toast.success("Your account has been successfully deleted.");
-      onLogout();
-    } catch (err) {
-      setError(err.response?.data?.detail || err.message);
-      toast.error("Error deleting account: " + (err.response?.data?.detail || err.message));
-      console.error("Error deleting account:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const openConfirmationModal = () => {
     setIsModalOpen(true);
@@ -113,7 +97,7 @@ const Profile = ({ userInfo, onUpdate, onLogout }) => {
 Profile.propTypes = {
   userInfo: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default Profile;
